@@ -19,6 +19,15 @@ bool FFDemux::Open(const char *url){
     }
     XLOGI("FFDemux open %s success!",url);
 
+    //读取文件信息
+    re = avformat_find_stream_info(ic,0);
+    if(re != 0 ){
+        XLOGE("openavformat_find_stream_info %s failed!",url);
+    }
+    XLOGI("openavformat_find_stream_info success!");
+    this->totalMs = ic->duration/(AV_TIME_BASE/1000);
+    XLOGI("totalMs %d!",totalMs);
+
     return true;
 }
 
