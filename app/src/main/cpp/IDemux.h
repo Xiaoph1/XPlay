@@ -5,9 +5,10 @@
 #ifndef XPLAY_IDEMUX_H
 #define XPLAY_IDEMUX_H
 #include "XData.h"
+#include "XThread.h"
 
 //解封装接口
-class IDemux {
+class IDemux: public XThread{
 public:
     //打开文件，或者流媒体 rmtp,http,rtsp
     virtual bool Open(const char *url) = 0;
@@ -18,6 +19,8 @@ public:
     //总时长(ms)
     int totalMs = 0;
 
+private:
+    virtual void Main();
 };
 
 
