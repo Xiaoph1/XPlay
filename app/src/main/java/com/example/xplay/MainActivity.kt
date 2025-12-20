@@ -1,8 +1,12 @@
 package com.example.xplay
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.xplay.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -14,6 +18,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 动态申请存储权限
+        requestPermissions()
 
         // Example of a call to a native method
         binding.sampleText.text = stringFromJNI()
@@ -29,6 +36,19 @@ class MainActivity : AppCompatActivity() {
         // Used to load the 'xplay' library on application startup.
         init {
             System.loadLibrary("xplay")
+        }
+    }
+
+    // 申请权限
+    private fun requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                1001
+            )
         }
     }
 }
