@@ -24,6 +24,42 @@ project("xplay")
 # System.loadLibrary() and pass the name of the library defined here;
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
+#添加头文件路径
+include_directories(include)
+
+#设置ffmpeg所在路径变量
+set(FFMPEG_LIBS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
+# avcodec.so
+add_library(avcodec SHARED IMPORTED)
+set_target_properties(avcodec PROPERTIES
+        IMPORTED_LOCATION ${FFMPEG_LIBS_DIR}/armeabi-v7a/libavcodec.so
+)
+# 引入libswresample.so
+add_library(swresample SHARED IMPORTED)
+set_target_properties(swresample PROPERTIES
+        IMPORTED_LOCATION ${FFMPEG_LIBS_DIR}/armeabi-v7a/libswresample.so
+)
+#libavutil.so
+add_library(avutil SHARED IMPORTED)
+set_target_properties(avutil PROPERTIES
+        IMPORTED_LOCATION ${FFMPEG_LIBS_DIR}/armeabi-v7a/libavutil.so
+)
+#libavfilter
+add_library(avfilter SHARED IMPORTED)
+set_target_properties(avfilter PROPERTIES
+        IMPORTED_LOCATION ${FFMPEG_LIBS_DIR}/armeabi-v7a/libavfilter.so
+)
+#libavformat
+add_library(avformat SHARED IMPORTED)
+set_target_properties(avformat PROPERTIES
+        IMPORTED_LOCATION ${FFMPEG_LIBS_DIR}/armeabi-v7a/libavformat.so
+)
+#libswscale
+add_library(swscale SHARED IMPORTED)
+set_target_properties(swscale PROPERTIES
+        IMPORTED_LOCATION ${FFMPEG_LIBS_DIR}/armeabi-v7a/libswscale.so
+)
+
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         native-lib.cpp)
@@ -33,5 +69,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
 # build script, prebuilt third-party libraries, or Android system libraries.
 target_link_libraries(${CMAKE_PROJECT_NAME}
         # List libraries link to the target library
+        OpenSLES GLESv2 EGL
+        avcodec swresample avutil avfilter avformat swscale
         android
         log)

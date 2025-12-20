@@ -7,6 +7,13 @@ android {
     namespace = "com.example.xplay"
     compileSdk = 36
 
+    // sourceSets 是 android 块的直接子节点，与 defaultConfig 同级
+    sourceSets {
+        getByName("main") {
+            jniLibs.srcDirs("libs") // 指定JNI库目录
+        }
+    }
+
     defaultConfig {
         applicationId = "com.example.xplay"
         minSdk = 24
@@ -19,6 +26,9 @@ android {
             cmake {
                 cppFlags += "-std=c++11"
             }
+        }
+        ndk {
+            abiFilters.add("armeabi-v7a")
         }
     }
 
