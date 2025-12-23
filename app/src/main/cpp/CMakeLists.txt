@@ -72,6 +72,11 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         FFDecode.cpp
         IDecode.cpp
         XParameter.cpp
+        IVideoView.cpp
+        GLVideoView.cpp
+        XTexture.cpp
+        XShader.cpp
+        XEGL.cpp
 )
 
 # Specifies libraries CMake should link to your target library. You
