@@ -67,7 +67,12 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         FFDemux.cpp
         XData.cpp
         XLog.cpp
-        XThread.cpp)
+        XThread.cpp
+        IObserver.cpp
+        FFDecode.cpp
+        IDecode.cpp
+        XParameter.cpp
+)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this

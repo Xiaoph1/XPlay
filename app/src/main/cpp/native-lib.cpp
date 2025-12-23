@@ -3,6 +3,14 @@
 #include <unistd.h>
 #include "FFDemux.h"
 #include "XLog.h"
+#include "FFDecode.h"
+
+class TestObs:public IObserver{
+public:
+    void Update(XData d){
+//        XLOGI("TestObs Update data size is %d",d.size);
+    }
+};
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_xplay_MainActivity_stringFromJNI(
@@ -10,13 +18,19 @@ Java_com_example_xplay_MainActivity_stringFromJNI(
         jobject /* this */) {
     std::string hello = "Hello from C++";
 
+
+    //测试代码
+    TestObs *tobs = new TestObs();
     IDemux *de = new FFDemux();
+    de->AddObs(tobs);
     de->Open("/sdcard/1.mp4");
-//    for (;;) {
-//        XData d = de->Read();
-//        XLOGI("read data size id %d",d.size);
-//    }
+
+    IDecode *vdecode = new FFDecode;
+    vdecode->Open(de->GetVPara());
+
     de->Start();
+    XSleep(3000);
+    de->Stop();
 
     return env->NewStringUTF(hello.c_str());
 }

@@ -5,6 +5,8 @@
 #ifndef XPLAY_XTHREAD_H
 #define XPLAY_XTHREAD_H
 
+void XSleep(int mis);
+
 //线程库
 class XThread {
 public:
@@ -15,6 +17,10 @@ public:
 
     //入口主函数
     virtual void Main(){}
+
+protected:
+    bool isExit = false;
+    bool isRuning = false;
 
 private:
     void ThreadMain();
