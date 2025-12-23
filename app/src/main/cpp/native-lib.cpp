@@ -22,15 +22,23 @@ Java_com_example_xplay_MainActivity_stringFromJNI(
     //测试代码
     TestObs *tobs = new TestObs();
     IDemux *de = new FFDemux();
-    de->AddObs(tobs);
+//    de->AddObs(tobs);
     de->Open("/sdcard/1.mp4");
 
     IDecode *vdecode = new FFDecode;
     vdecode->Open(de->GetVPara());
 
+    IDecode *adecode = new FFDecode;
+    adecode->Open(de->GetAPara());
+
+    de->AddObs(vdecode);
+    de->AddObs(adecode);
+
     de->Start();
-    XSleep(3000);
-    de->Stop();
+    vdecode->Start();
+    adecode->Start();
+//    XSleep(3000);
+//    de->Stop();
 
     return env->NewStringUTF(hello.c_str());
 }

@@ -27,6 +27,8 @@ bool FFDemux::Open(const char *url){
     XLOGI("openavformat_find_stream_info success!");
     this->totalMs = ic->duration/(AV_TIME_BASE/1000);
     XLOGI("totalMs %d!",totalMs);
+    GetVPara();
+    GetAPara();
 
     return true;
 }
@@ -43,6 +45,7 @@ XParameter FFDemux::GetVPara() {
         XLOGE("av_find_best_stream failed");
         return XParameter();
     }
+    videoStream = re;
     XParameter para;
     para.para = ic->streams[re]->codecpar;
     return para;
@@ -61,6 +64,16 @@ XData FFDemux::Read() {
 //    XLOGI("paket size is %d pts %lld",pkt->size,pkt->pts);
     d.data = (unsigned char*)pkt;
     d.size = pkt->size;
+    if (pkt->stream_index == audioStream){
+        d.isAudio = true;
+    }
+    else if (pkt->stream_index == videoStream){
+        d.isAudio = false;
+    }
+    else{
+        av_packet_free(&pkt);
+        return XData();
+    }
 
     return d;
 }
@@ -79,4 +92,21 @@ FFDemux::FFDemux(){
         isFirst = false;
     }
 
+}
+
+XParameter FFDemux::GetAPara() {
+    if(!ic){
+        XLOGE("GetVPara ic is null");
+        return XParameter();
+    }
+    //获取音频流信息
+    int re = av_find_best_stream(ic,AVMEDIA_TYPE_AUDIO,-1,-1,0,0);
+    if (re<0){
+        XLOGE("av_find_best_stream failed");
+        return XParameter();
+    }
+    videoStream = re;
+    XParameter para;
+    para.para = ic->streams[re]->codecpar;
+    return para;
 }
