@@ -3,6 +3,7 @@
 //
 
 #include "IDecode.h"
+#include "XLog.h"
 
 void IDecode::Update(XData pkt) {
     if (pkt.isAudio != isAudio){
@@ -38,6 +39,7 @@ void IDecode::Main() {
             while(!isExit){
                 XData frame = RecvFrame();
                 if(!frame.data) break;
+                XLOGI("RecvFrame %d",frame.size);
                 this->Notify(frame);
             }
 
