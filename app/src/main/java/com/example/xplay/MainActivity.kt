@@ -4,12 +4,19 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Surface
+import android.view.SurfaceHolder
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.InitializerViewModelFactoryBuilder
 import com.example.xplay.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -31,6 +38,7 @@ class MainActivity : AppCompatActivity() {
      * which is packaged with this application.
      */
     external fun stringFromJNI(): String
+    external fun InitView(surface: Surface)
 
     companion object {
         // Used to load the 'xplay' library on application startup.
@@ -51,4 +59,24 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        // 初始化opengl egl显示
+        InitView(holder.surface);
+    }
+
+
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        // Surface 尺寸或格式改变时的处理
+    }
+
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Surface 销毁时的处理
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        stopPlay()
+    }
+
 }
