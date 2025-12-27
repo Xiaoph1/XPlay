@@ -2,6 +2,7 @@ package com.example.xplay
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.PixelFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Surface
@@ -28,6 +29,10 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
 
         // 动态申请存储权限
         requestPermissions()
+
+        // 初始化 SurfaceView 相关（通过 binding 访问控件）
+        binding.surfaceView.holder.addCallback(this)
+        binding.surfaceView.holder.setFormat(PixelFormat.RGBA_8888) // 匹配 RGBA 格式
 
         // Example of a call to a native method
         binding.sampleText.text = stringFromJNI()
