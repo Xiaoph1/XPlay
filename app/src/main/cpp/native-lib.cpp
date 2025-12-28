@@ -5,6 +5,7 @@
 #include "XLog.h"
 #include "FFDecode.h"
 #include "XEGL.h"
+#include "XShader.h"
 #include <android/native_window_jni.h>
 
 class TestObs:public IObserver{
@@ -51,4 +52,6 @@ Java_com_example_xplay_MainActivity_InitView(JNIEnv *env, jobject thiz, jobject 
     //显示窗口初始化
     ANativeWindow *nwin = ANativeWindow_fromSurface(env,surface);
     XEGL::Get()->Init(nwin);
+    XShader shader;
+    shader.Init();
 }
