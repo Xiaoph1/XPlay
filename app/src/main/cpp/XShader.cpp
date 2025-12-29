@@ -135,3 +135,34 @@ bool XShader::Init() {
 
     return true;
 }
+
+void XShader::Draw() {
+    if (!program){
+        return;
+    }
+    //三维绘制
+    glDrawArrays(GL_TRIANGLES,0,4);
+}
+
+void XShader::GetTexture(unsigned int index, int width, int height, unsigned char *buf) {
+    if (texts[index]==0){
+        //材质初始化
+        glGenTextures(1,&texts[index]);
+        glBindTexture(GL_TEXTURE_2D,texts[index]);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D,
+                     0,
+                     GL_LUMINANCE,
+                     width,height,
+                     0,
+                     GL_LUMINANCE,
+                     GL_UNSIGNED_BYTE,
+                     NULL
+                );
+    }
+    glActiveTexture(GL_TEXTURE0 + index);
+    glBindTexture(GL_TEXTURE_2D,texts[index]);
+    glTexSubImage2D(GL_TEXTURE_2D,0,0,0,width,height,GL_LUMINANCE,GL_UNSIGNED_BYTE,buf);
+}
+

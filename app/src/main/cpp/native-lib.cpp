@@ -6,6 +6,8 @@
 #include "FFDecode.h"
 #include "XEGL.h"
 #include "XShader.h"
+#include "IVideoView.h"
+#include "GLVideoView.h"
 #include <android/native_window_jni.h>
 
 class TestObs:public IObserver{
@@ -14,6 +16,8 @@ public:
 //        XLOGI("TestObs Update data size is %d",d.size);
     }
 };
+
+IVideoView *view = NULL;
 
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_xplay_MainActivity_stringFromJNI(
@@ -37,6 +41,10 @@ Java_com_example_xplay_MainActivity_stringFromJNI(
     de->AddObs(vdecode);
     de->AddObs(adecode);
 
+    view = new GLVideoView();
+    vdecode->AddObs(view);
+
+
     de->Start();
     vdecode->Start();
     adecode->Start();
@@ -51,7 +59,9 @@ JNIEXPORT void JNICALL
 Java_com_example_xplay_MainActivity_InitView(JNIEnv *env, jobject thiz, jobject surface) {
     //显示窗口初始化
     ANativeWindow *nwin = ANativeWindow_fromSurface(env,surface);
-    XEGL::Get()->Init(nwin);
-    XShader shader;
-    shader.Init();
+    view->SetRender(nwin);
+//    XEGL::Get()->Init(nwin);
+//    XShader shader;
+//    shader.Init();
+
 }
